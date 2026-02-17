@@ -2,8 +2,8 @@
 Test Cases for Counter Web Service
 
 Create a service that can keep a track of multiple counters
-- API must be RESTful - see the status.py file. Following these guidelines, you can make assumptions about
-how to call the web service and assert what it should return.
+- API must be RESTful - see the status.py file. Following these guidelines, you can
+  make assumptions about how to call the web service and assert what it should return.
 - The endpoint should be called /counters
 - When creating a counter, you must specify the name in the path.
 - Duplicate names must return a conflict error code.
@@ -15,10 +15,12 @@ import pytest
 from src import app
 from http import HTTPStatus
 
+
 @pytest.fixture()
 def client():
     """Fixture for Flask test client"""
     return app.test_client()
+
 
 @pytest.mark.usefixtures("client")
 class TestCounterEndpoints:
@@ -90,8 +92,7 @@ class TestCounterEndpoints:
         """It should return 405 for unsupported HTTP methods"""
         response = client.patch('/counters/test_counter')
         assert response.status_code == HTTPStatus.METHOD_NOT_ALLOWED
-    
-    
+
     """Test cases for Extended Counter API"""
 
     # ===========================
@@ -108,8 +109,8 @@ class TestCounterEndpoints:
         response = client.get('/counters/total')
 
         assert response.status_code == HTTPStatus.OK
-        
-        # TODO: Add an assertion to check the correct total value
+
+    # TODO: Add an assertion to check the correct total value
 
     # ===========================
     # Test: Retrieve top N highest counters
@@ -128,7 +129,7 @@ class TestCounterEndpoints:
         response = client.get('/counters/top/2')
 
         assert response.status_code == HTTPStatus.OK
-        assert len(response.get_json()) <= 2  
+        assert len(response.get_json()) <= 2
 
         # TODO: Add an assertion to ensure the returned counters are sorted correctly
 
@@ -146,7 +147,7 @@ class TestCounterEndpoints:
         response = client.get('/counters/bottom/1')
 
         assert response.status_code == HTTPStatus.OK
-        assert min(response.get_json().values()) == 0  
+        assert min(response.get_json().values()) == 0
 
         # TODO: Add an assertion to check that 'b' is indeed in the response
 
@@ -163,7 +164,7 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.OK
         assert response.get_json() == {"test1": 5}
 
-        # TODO: Add an assertion to check setting to the same value does not change it again
+    # TODO:Add an assertion to check setting to the same value does not change it again
 
     # ===========================
     # Test: Prevent negative counter values
@@ -177,9 +178,9 @@ class TestCounterEndpoints:
         response_zero = client.put('/counters/test1/set/0')
         response_negative = client.put('/counters/test1/set/-3')
 
-        assert response_zero.status_code == HTTPStatus.OK  
-        assert response_negative.status_code == HTTPStatus.BAD_REQUEST  
-        
+        assert response_zero.status_code == HTTPStatus.OK
+        assert response_negative.status_code == HTTPStatus.BAD_REQUEST
+
         # TODO: Add an assertion to verify the response message contains a clear error
 
     # ===========================
@@ -210,7 +211,7 @@ class TestCounterEndpoints:
 
         assert response.status_code == HTTPStatus.NOT_FOUND
 
-        # TODO: Add an assertion to verify the error message contains the word 'not found'
+    # TODO: Add an assertion to verify the error message contains the word 'not found'
 
     # ===========================
     # Test: Get total number of counters
@@ -226,7 +227,7 @@ class TestCounterEndpoints:
         response = client.get('/counters/count')
 
         assert response.status_code == HTTPStatus.OK
-        assert isinstance(response.get_json()["count"], int)  
+        assert isinstance(response.get_json()["count"], int)
 
         # TODO: Add an assertion to check the exact count value
 
@@ -276,4 +277,5 @@ class TestCounterEndpoints:
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
 
-        # TODO: Add an assertion to verify the error message specifically says 'Invalid counter name'S
+    # TODO: Add an assertion to verify the error message specifically says
+    # 'Invalid counter name'S
