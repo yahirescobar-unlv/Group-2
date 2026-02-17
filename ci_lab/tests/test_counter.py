@@ -268,7 +268,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Validate counter names (prevent special characters)
-    # Author: Student 11
+    # Author: Yahir Escobar
     # Modification: Ensure error message is specific.
     # ===========================
     def test_validate_counter_name(self, client):
@@ -276,6 +276,19 @@ class TestCounterEndpoints:
         response = client.post('/counters/test@123')
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
+        assert "Invalid counter name" in response.get_json()["error"]
 
-    # TODO: Add an assertion to verify the error message specifically says
-    # 'Invalid counter name'S
+    # ===========================
+    # Test: Confirm the counter was removed from the system
+    # Author: Yahir Escobar
+    # Modification: Validate that deleted resources are no longer accessible.
+    # ===========================
+    def test_deleted_counter_cannot_be_retrieved(self, client):
+        """It should not allow retrieving a counter after it has been deleted"""
+        client.post('/counters/temp_counter')
+        client.delete('/counters/temp_counter')
+
+        response = client.get('/counters/temp_counter')
+
+        assert response.status_code == HTTPStatus.NOT_FOUND
+        assert "not found" in response.get_json()["error"].lower()
