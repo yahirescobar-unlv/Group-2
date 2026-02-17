@@ -1,6 +1,6 @@
 """
 Counter API Implementation
-This line will fail Flake8 check because it is more than 88 characters long!!!!!!!!!!!!! 
+This line will no longer fail Flake8 because it is less than 88 characters long.
 """
 from flask import Flask, jsonify
 from http import HTTPStatus
